@@ -150,7 +150,6 @@ canvas {
   box-shadow: 0 5px rgb(56, 66, 73);
   transform: translateY(4px);
   font-weight: 600;
-  font-size: 1.6rem;
 }
 
 .btn-start:hover {

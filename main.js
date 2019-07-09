@@ -8,10 +8,13 @@ var shapeOne;
 var randomShape;
 var randomColor;
 
+
+
   function randShape() {
     var randNr = (Math.floor(Math.random()*shapesArr.length));
     randomShape = shapesArr[randNr][0];
     randomColor = shapesArr[randNr][1];
+    ctx.fillStyle = randomColor;
   }
 
   function draw() {
@@ -23,10 +26,26 @@ var randomColor;
     shapeOne.y += boxSize;
   }
 
+  document.onkeydown = function(e) {
+    switch (e.keyCode) {
+        case 37: // left
+          shapeOne.x -= 45;
+            break;
+        case 38: // up
+          shapeOne.rotateShape();
+            break;
+        case 39: // right
+           shapeOne.x += 45;
+            break;
+        case 40: // down
+            break;
+    }
+  };
+
   function startGame() {
     
     randShape();
-    shapeOne = new Shape(randomShape, canvas.width/2, 0, randomColor);
+    shapeOne = new Shape(randomShape, 135, 0, randomColor);
     draw();
 
     setInterval(() =>  {
