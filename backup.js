@@ -99,3 +99,122 @@
 // }
 //=====End Draw Canvas=====
 
+
+
+
+
+
+
+
+
+
+//   //=====End new Block=====
+
+//   // Draw
+//   updateCanvas() {
+
+//     var y = 0;
+//     var x = 0;
+  
+//     for (let i = 0; i < this.gridMod.length; i++) {
+//       y = y + (45 * i);
+  
+//       for (let j = 0; j < this.gridMod[i].length; j++) {
+//         x = x + (45 * j)
+  
+//         if (this.gridMod[i][j] === 1) {
+//           ctx.fillRect(x, y, 45 ,45);
+  
+//         }
+//         x = 0;
+//       }
+//       y=0;
+//     }  
+//   }
+//   //=====End Draw=====
+
+//   //Falling Anmimation
+//   animateFalling(){
+
+//     this.intervalId = setInterval(function() { 
+    
+//       for (let i = this.gridMod.length-1; i > 0; i--) {
+//         for (let j = 0; j < this.gridMod[i].length; j++) {
+
+//           if (this.gridMod[i-1][j] === 1) {
+//             this.gridMod[i][j] = this.gridMod[i-1][j];
+//             this.gridMod[i-1][j] = 0;
+//           }
+//         }
+//       } 
+//       /* Currently its looping over the grid and updating every singlr  */
+
+//       this.updateCanvas();
+//     }.bind(this), 1000);
+//   }
+//   //=====End Falling Animation=====
+// }
+// //=====END CLASS=====
+
+
+
+
+
+
+
+
+
+
+//   // Draw
+//   draw() {
+
+//     var y = 0;
+//     var x = 0;
+  
+//     for (let i = 0; i < this.gridMod.length; i++) {
+//       y = y + (45 * i);
+  
+//       for (let j = 0; j < this.gridMod[i].length; j++) {
+//         x = x + (45 * j)
+  
+//         if (this.gridMod[i][j] === 1) {
+//           ctx.fillRect(x, y, 45 ,45);
+  
+//         }
+//         x = 0;
+//       }
+//       y=0;
+//     }  
+//   }
+
+//   drawBlock(x, y, color) {
+//     ctx.fillStyle = color;
+//     y = (45 * y);
+//     x = (45 * x)
+//     ctx.fillRect(y, x, 45 ,45);
+//   }
+//   //=====End Draw=====
+
+//   //Falling Anmimation
+//   animateFalling(){
+
+//     this.intervalId = setInterval(function() { 
+    
+//       for (let i = this.gridMod.length-1; i > 0; i--) {
+//         for (let j = 0; j < this.gridMod[i].length; j++) {
+
+//           if (this.gridMod[i-1][j] === 1) {
+//             this.gridMod[i][j] = this.gridMod[i-1][j];
+//             this.gridMod[i-1][j] = 0;
+//             this.drawBlock(i-1, j, "white")
+//             // this.gridMod[i-1][j] = 0;
+//           }
+//         }
+//       } 
+
+//       this.draw();
+//     }.bind(this), 1000);
+//   }
+//   //=====End Falling Animation=====
+// }
+// //=====END CLASS=====
