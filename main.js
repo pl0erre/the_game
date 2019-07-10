@@ -7,11 +7,11 @@ var ctx = canvas.getContext("2d");
 var shapeOne;
 var randomShape;
 var randomColor;
-
+var randNr;
 
 
   function randShape() {
-    var randNr = (Math.floor(Math.random()*shapesArr.length));
+    randNr = (Math.floor(Math.random()*shapesArr.length));
     randomShape = shapesArr[randNr][0];
     randomColor = shapesArr[randNr][1];
     ctx.fillStyle = randomColor;
@@ -30,14 +30,23 @@ var randomColor;
     switch (e.keyCode) {
         case 37: // left
           shapeOne.x -= 45;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          shapeOne.draw(ctx);
             break;
         case 38: // up
           shapeOne.rotateShape();
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          shapeOne.draw(ctx);
             break;
         case 39: // right
-           shapeOne.x += 45;
-            break;
+          shapeOne.x += 45;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          shapeOne.draw(ctx);
+          break;
         case 40: // down
+            shapeOne.y += 45;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            shapeOne.draw(ctx);
             break;
     }
   };

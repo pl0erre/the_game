@@ -53,20 +53,14 @@ const shapesArr = [
         [shape_z, "#A40B0B"]
         ];
 
-// ==============================================================================
+// =======================================================
 
 class Box {
-  constructor(x, y, size, color) {
+  constructor(x, y, size,) {
     this.x = x,
     this.y = y,
     this.size = size,
-    this.color = color,
     this.shape = ""
-  }
-  
-  displayBox() {
-    ctx.fillStyle = this.color;
-    ctx.fillRect(this.x, this.y, this.size, this.size)
   }
 }
 
@@ -94,39 +88,20 @@ class Shape {
   }
 
   draw(ctx) {
+
     this.shape = this.generateShape();
     this.shape.forEach(box => ctx.fillRect(box.x, box.y, box.size, box.size))
   }
-
-  rotateShape() {
-    let shapeTranspose = [];
   
-    for (let i = 0; i < this.currentShape.length; i++) {
-      shapeTranspose.push([]);
+  rotateShape() {
+    let rotate = [];
+    for(let i = 0; i < this.currentShape.length; i++) {
+        for(let j = 0; j < this.currentShape[i].length; j++) {
+            if(!Array.isArray(rotate[j])) rotate[j] = [];
+            rotate[j].unshift(this.currentShape[i][j]);
+        }
     }
-    for (let i = 0; i < this.currentShape.length; i++) {
-      for (let j = 0; j < this.currentShape.length; j++) {
-        shapeTranspose[j].push(this.currentShape[i][j]);
-      }
-    }
-    this.currentShape = shapeTranspose;
+    this.currentShape = rotate;
   }
 
 }
-
-
-
-// function transposeArray(array, arrayLength){
-//   var newArray = [];
-//   for(var i = 0; i < array.length; i++){
-//       newArray.push([]);
-//   };
-
-//   for(var i = 0; i < array.length; i++){
-//       for(var j = 0; j < arrayLength; j++){
-//           newArray[j].push(array[i][j]);
-//       };
-//   };
-
-//   return newArray;
-// }
