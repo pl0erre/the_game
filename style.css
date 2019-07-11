@@ -119,6 +119,24 @@ h3 {
 
 }
 
+.empty-box {
+    border: none;
+    background: none;
+}
+
+.next-box {
+    flex: 2;
+}
+
+.name-box {
+    display: flex;
+    justify-content: center;
+}
+
+#nameField {
+    margin: 25%;
+}
+
 
 canvas {
     background-color:#c4f0c2;
@@ -126,16 +144,16 @@ canvas {
 }
 
 .btn-box {
-    flex: 1;
+
     display: flex;
     flex-direction: column;
     background-color: rgba(255, 255, 255, 0);
-    /* border: none; */
+    border: none;
 }
 
 /* BUTTON STYLING */
 .btn {
-    flex: 1;
+
     margin: 15px auto;
     border-radius: 20px;
     background-color: slategray;
