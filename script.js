@@ -3,7 +3,7 @@
 var timer = 500;
 const boxSize = 45;
 
-const shape_b = [[[1,1],[1,1]],[[1,1],[1,1]],[[1,1],[1,1]]];
+const shape_b = [[[1,1],[1,1]],[[1,1],[1,1]],[[1,1],[1,1]],[[1,1],[1,1]]];
 
 const shape_j = [[[1,1,1],[0,0,1],[0,0,0]],[[0,1,0],[0,1,0],[1,1,0]],[[1,0,0],[1,1,1],[0,0,0]]];
 
@@ -225,7 +225,6 @@ class Game {
     this.currentShape =  this.getRandShape(); // pick a random shapes array and pass it to Shape class to build a new shape
     this.canvas = document.getElementsByClassName("canvas")[0]; // select canvas ans assign to this.canvas
     this.play(); // execute play() method when new Game is created (see play();)
-    this.intervalId;
   }
 
   // selects a random shape from the shapesArr. This is then stored in this.currentShape
