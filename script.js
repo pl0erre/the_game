@@ -180,15 +180,15 @@ class Board {
   reachedTop() {
     for (let i = 0; i < this.gridOfBoxes.length; i++) {
       if (this.gridOfBoxes[i].y === -boxSize) {
-        alert("GAME OVER");
+        return true;
       }
     }
+  return false;
   }
 
             isFullRow() {
 
               let rowCounter = [];
-              let fullRowPosition = 0; // y value of specific row
               // generate array with 18 zeros, one for each row
               for (let i = 0; i < 18; i++) {
                 rowCounter.push(0);
@@ -196,30 +196,24 @@ class Board {
               //  loop over grid and increment counter for each specific row
               for (let j = 0; j < this.gridOfBoxes.length; j++) {
                 if (this.gridOfBoxes[j].y % 45 === 0) {
-                  rowCounter[(this.gridOfBoxes[j].y/45)]++;
-                }
-                // if row counter reaches 10, store y value of this row in fullRowPosition
-                if (rowCounter[(this.gridOfBoxes[j].y/45)] === 10) {
-                  fullRowPosition = this.gridOfBoxes[j].y;
+                  rowCounter[Math.floor(this.gridOfBoxes[j].y/45)]++;
                 }
               }
-              return fullRowPosition;
+              for(let num = 0; num < rowCounter.length; num ++) {
+                if(rowCounter[num] > 9) return num*boxSize;
+              }
             }
 
             // loop over grid and look for objects with fullRowPosition y value
             // if detected --> delete
-            deleteRow(fullRowPosition) {
-              fullRowPosition = this.isFullRow(); // verweis zu isFullRow() wahrscheinlich falsch
-              for (let i = 0; i < this.gridOfBoxes.length; i++){
-                if (this.gridOfBoxes[i].y === fullRowPosition) {
-                  this.gridOfBoxes.splice(i, 1);
-                }
-              } 
+            deleteRow(fullRow) {
+              this.gridOfBoxes = this.gridOfBoxes.filter(box => box.y !== fullRow)
             }
 
             // moves all boxes in the grid by one boxSize
-            propagateBoard() {
+            propagateBoard(fullRow) {
               for (let i = 0; i < this.gridOfBoxes.length; i++) {
+                if(this.gridOfBoxes[i].y > fullRow) continue;
                 this.gridOfBoxes[i].y += boxSize;
               }
             }
@@ -248,7 +242,7 @@ class Game {
   // The interval which executes propagation and drawing of the board + the current falling shape
   play() {
   // this.addName()
-   setInterval(function() {
+   this.intervalId = setInterval(function() {
      this.propagate([0,1]); // y = 1 --> (see propagateShape) increases y by 45 every interval.
      this.draw();
    }.bind(this), timer)
@@ -272,12 +266,19 @@ class Game {
     if (!this.board.doesShapeFit(this.currentShape)) {
       this.currentShape = undefined;
       this.board.addBoxes(currentShapeBoxesTemp);
+      let fullRow = this.board.isFullRow();
+      if(fullRow >= 0) {
+        console.log("deleting full row nr. " + fullRow)
+        this.board.deleteRow(fullRow);
+        this.board.propagateBoard(fullRow);
+      }
     }
-    
-    this.board.reachedTop();
-    // this.board.isFullRow();
-    // this.board.deleteRow();
-    // this.board.propagateBoard();
+    if (this.board.reachedTop()) {
+      alert("GAME OVER");
+      clearInterval(this.intervalId);
+    }
+
+  
 
     // when done, draw 
     this.draw();
