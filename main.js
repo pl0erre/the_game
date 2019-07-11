@@ -1,7 +1,7 @@
 
 document.addEventListener("DOMContentLoaded", function(event) {
 
-  var pauseMessage = "Game paused. Press `Enter` to continue"
+  var pauseMessage = "Game Paused\nPress `SPACE` to continue";
   var game = new Game();
 
   document.onkeydown = function(e) {
@@ -11,19 +11,20 @@ document.addEventListener("DOMContentLoaded", function(event) {
           game.draw();
             break;
         case 38: // up
-          game.currentShape.rotateShape();
+          game.rotate();
+          game.draw();
             break;
         case 39: // right
           game.propagate([1,0]);
           game.draw();
-
           break;
         case 40: // down
           game.propagate([0,1]);
           game.draw();
           break;
+        case 32: //Space
+          alert(pauseMessage)
         default:
-          // alert("Invalid Key");
           break;
     }
   }

@@ -3,47 +3,19 @@
 var timer = 500;
 const boxSize = 45;
 
-const shape_b = [
-  [1,1],
-  [1,1]
-      ]
+const shape_b = [[[1,1],[1,1]],[[1,1],[1,1]],[[1,1],[1,1]]];
 
-const shape_j = [
-  [1,1,1],
-  [0,0,1],
-  [0,0,0]
-      ]
+const shape_j = [[[1,1,1],[0,0,1],[0,0,0]],[[0,1,0],[0,1,0],[1,1,0]],[[1,0,0],[1,1,1],[0,0,0]]];
 
-const shape_l = [
-  [1,1,1],
-  [1,0,0],
-  [0,0,0]
-      ]
+const shape_l = [[[1,1,1],[1,0,0],[0,0,0]],[[1,1,0],[0,1,0],[0,1,0]],[[0,0,1],[1,1,1],[0,0,0]]];
 
-const shape_i = [
-  [1,1,1,1],
-  [0,0,0,0],
-  [0,0,0,0],
-  [0,0,0,0]
-      ]
+const shape_i = [[[1,1,1,1],[0,0,0,0],[0,0,0,0],[0,0,0,0]],[[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0]],[[1,1,1,1],[0,0,0,0],[0,0,0,0],[0,0,0,0]]];
 
-const shape_t = [
-  [1,1,1],
-  [0,1,0],
-  [0,0,0]
-      ]
+const shape_t = [[[1,1,1],[0,1,0],[0,0,0]],[[0,0,1],[0,1,1],[0,0,1]],[[0,1,0],[1,1,1],[0,0,0]]];
 
-const shape_s = [
-  [0,1,1],
-  [1,1,0],
-  [0,0,0]
-      ]
+const shape_s = [[[0,1,1],[1,1,0],[0,0,0]],[[1,0,0],[1,1,0],[0,1,0]],[[0,1,1],[1,1,0],[0,0,0]]];
 
-const shape_z = [
-  [1,1,0],
-  [0,1,1],
-  [0,0,0]
-      ]
+const shape_z = [[[1,1,0],[0,1,1],[0,0,0]],[[0,1,0],[1,1,0],[1,0,0]],[[1,1,0],[0,1,1],[0,0,0]]];
 
 const shapesArr = [
         [shape_b, "#00CC2C"],
@@ -72,10 +44,34 @@ class Box {
 
 //  ===== SHAPE CLASS =====
 class Shape {
-  constructor(currentShape = [[]], x, y, color) {
-    this.currentShape = currentShape,
-    this.color = color,
-    this.shape = this.generateShape(x, y)
+  constructor(inputShape, x, y, color) {
+    this.rotationCounter = 0;
+    this.defaultShape = inputShape;
+    this.currentShape = inputShape[this.rotationCounter];
+    this.color = color;
+    this.shape = this.generateShape(x, y);
+  }
+
+  rotate() {
+    this.rotationCounter++;
+    this.rotationCounter = this.rotationCounter % 3;
+    this.currentShape = this.defaultShape[this.rotationCounter];
+    let [x, y] = this.shape.reduce((arr, box) => [arr[0] + box.x, arr[1] + box.y], [0, 0]).map(i => Math.floor((i/this.shape.length)/boxSize)*boxSize);
+    
+    let currentShapeBoxesTemp = [].concat(this.shape);
+    this.shape = this.generateShape(x, y);
+    let checkWall = true
+
+    for (let i = 0; i < this.shape.length; i++) {
+      if (this.shape[i].x  === 0 || this.shape[i].x + boxSize >= 450) {
+        checkWall = false;
+      }
+    }
+    if(!checkWall) {
+      this.rotationCounter--;
+      this.rotationCounter = this.rotationCounter < 0 ? 3 : this.rotationCounter;
+      this.shape = currentShapeBoxesTemp;
+    }
   }
 
   // Translates the shape arrays to a collection of boxes corresponding to the selected shape
@@ -103,8 +99,6 @@ class Shape {
   propagateShape(relCoordinates) {
     
     let checkWall = true
-    let checkTop = true
-
 
     for (let i = 0; i < this.shape.length; i++) {
       if (this.shape[i].x  === 0 && relCoordinates[0] === -1 || this.shape[i].x + boxSize == 450 && relCoordinates[0] === 1) {
@@ -123,12 +117,6 @@ class Shape {
         this.shape[i].y += boxSize * relCoordinates[1];
         } 
     }
-  }
-
-  rotateShape() {
-    // for (let i = 0; i < this.currentShape.length; i++) {
-    //   switch()
-    // }
   }
 }
 //  ===== END SHAPE CLASS =====
@@ -186,37 +174,45 @@ class Board {
   return false;
   }
 
-            isFullRow() {
+  isFullRow() {
 
-              let rowCounter = [];
-              // generate array with 18 zeros, one for each row
-              for (let i = 0; i < 18; i++) {
-                rowCounter.push(0);
-              }
-              //  loop over grid and increment counter for each specific row
-              for (let j = 0; j < this.gridOfBoxes.length; j++) {
-                if (this.gridOfBoxes[j].y % 45 === 0) {
-                  rowCounter[Math.floor(this.gridOfBoxes[j].y/45)]++;
-                }
-              }
-              for(let num = 0; num < rowCounter.length; num ++) {
-                if(rowCounter[num] > 9) return num*boxSize;
-              }
-            }
+    let rowCounter = [];
+    // generate array with 18 zeros, one for each row
+    for (let i = 0; i < 18; i++) {
+      rowCounter.push(0);
+    }
+    //  loop over grid and increment counter for each specific row
+    for (let j = 0; j < this.gridOfBoxes.length; j++) {
+      if (this.gridOfBoxes[j].y % 45 === 0) {
+        rowCounter[Math.floor(this.gridOfBoxes[j].y/45)]++;
+      }
+    }
+    for(let num = 0; num < rowCounter.length; num ++) {
+      if(rowCounter[num] > 9) return num*boxSize;
+    }
+  }
 
-            // loop over grid and look for objects with fullRowPosition y value
-            // if detected --> delete
-            deleteRow(fullRow) {
-              this.gridOfBoxes = this.gridOfBoxes.filter(box => box.y !== fullRow)
-            }
+  // loop over grid and look for objects with fullRowPosition y value
+  // if detected --> delete
+  deleteRow(fullRow) {
+    this.gridOfBoxes = this.gridOfBoxes.filter(box => box.y !== fullRow)
+  }
 
-            // moves all boxes in the grid by one boxSize
-            propagateBoard(fullRow) {
-              for (let i = 0; i < this.gridOfBoxes.length; i++) {
-                if(this.gridOfBoxes[i].y > fullRow) continue;
-                this.gridOfBoxes[i].y += boxSize;
-              }
-            }
+  // moves all boxes in the grid by one boxSize
+  propagateBoard(fullRow) {
+    for (let i = 0; i < this.gridOfBoxes.length; i++) {
+      if(this.gridOfBoxes[i].y > fullRow) continue;
+      this.gridOfBoxes[i].y += boxSize;
+    }
+    this.rowsScore();
+  }
+
+  rowsScore() {
+    var rowsScore = document.getElementById('rows');
+    var counter = rowsScore.innerHTML;
+    counter++;
+    rowsScore.innerHTML = counter;
+}
 
 }
 //  ===== END BOARD CLASS =====
@@ -229,6 +225,7 @@ class Game {
     this.currentShape =  this.getRandShape(); // pick a random shapes array and pass it to Shape class to build a new shape
     this.canvas = document.getElementsByClassName("canvas")[0]; // select canvas ans assign to this.canvas
     this.play(); // execute play() method when new Game is created (see play();)
+    this.intervalId;
   }
 
   // selects a random shape from the shapesArr. This is then stored in this.currentShape
@@ -241,48 +238,59 @@ class Game {
 
   // The interval which executes propagation and drawing of the board + the current falling shape
   play() {
-  // this.addName()
+  this.addName()
    this.intervalId = setInterval(function() {
      this.propagate([0,1]); // y = 1 --> (see propagateShape) increases y by 45 every interval.
      this.draw();
    }.bind(this), timer)
   }
 
-  propagate(relCoordinates) {
-
+  rotate() {
     // checks if current shape is undefined. If so generates new shape.
     if(this.currentShape === undefined) {
       this.currentShape = this.getRandShape();
       return;
     }
-
     // if shape is present, make a copy for backup (currentShapeBoxesTemp).
     let currentShapeBoxesTemp = [].concat(this.currentShape.shape);
+    // propagate shape
+    this.currentShape.rotate();
+    // if collision, add currentShapeBoxes to grid and set currentShape to undefined (will automatically generate a new shape in next iteration.)
+    if (!this.board.doesShapeFit(this.currentShape)) {
+      this.currentShape.shape = currentShapeBoxesTemp;
+    }
+    // when done, draw 
+    this.draw();
+  }
 
+  propagate(relCoordinates) {
+    // checks if current shape is undefined. If so generates new shape.
+    if(this.currentShape === undefined) {
+      this.currentShape = this.getRandShape();
+      return;
+    }
+    // if shape is present, make a copy for backup (currentShapeBoxesTemp).
+    let currentShapeBoxesTemp = [].concat(this.currentShape.shape);
     // propagate shape
     this.currentShape.propagateShape(relCoordinates);
-
     // if collision, add currentShapeBoxes to grid and set currentShape to undefined (will automatically generate a new shape in next iteration.)
     if (!this.board.doesShapeFit(this.currentShape)) {
       this.currentShape = undefined;
       this.board.addBoxes(currentShapeBoxesTemp);
       let fullRow = this.board.isFullRow();
       if(fullRow >= 0) {
-        console.log("deleting full row nr. " + fullRow)
         this.board.deleteRow(fullRow);
         this.board.propagateBoard(fullRow);
       }
+      if (this.board.reachedTop()) {
+        alert("GAME OVER");
+        // let ctx = this.canvas.getContext("2d");
+        // ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        clearInterval(this.intervalId);
+      }
     }
-    if (this.board.reachedTop()) {
-      alert("GAME OVER");
-      clearInterval(this.intervalId);
-    }
-
-  
-
     // when done, draw 
     this.draw();
-
   }
 
   draw() {
