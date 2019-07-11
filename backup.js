@@ -231,3 +231,16 @@
       
   //   }
     
+
+
+
+  // rotateShape() {
+  //   let rotate = [];
+  //   for(let i = 0; i < this.currentShape.length; i++) {
+  //       for(let j = 0; j < this.currentShape[i].length; j++) {
+  //           if(!Array.isArray(rotate[j])) rotate[j] = [];
+  //           rotate[j].unshift(this.currentShape[i][j]);
+  //       }
+  //   }
+  //   this.currentShape = rotate;
+  // }

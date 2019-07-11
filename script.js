@@ -102,61 +102,33 @@ class Shape {
   // modification by arrow keys is done here
   propagateShape(relCoordinates) {
     
-    let check = true
+    let checkWall = true
+    let checkTop = true
+
 
     for (let i = 0; i < this.shape.length; i++) {
       if (this.shape[i].x  === 0 && relCoordinates[0] === -1 || this.shape[i].x + boxSize == 450 && relCoordinates[0] === 1) {
-        check = false;
+        checkWall = false;
       }
     }
-    
-    if (check === false) {
+
+    if (checkWall === false) {
       for (let i = 0; i < this.shape.length; i++) {
         this.shape[i].x += boxSize * 0
         this.shape[i].y += boxSize * relCoordinates[1];
       }
-    } else if (check === true) {
+    } else if (checkWall === true) {
       for (let i = 0; i < this.shape.length; i++) {
         this.shape[i].x += boxSize * relCoordinates[0];
         this.shape[i].y += boxSize * relCoordinates[1];
         } 
     }
-
-
-    // this.shape.forEach(box => {
-    //     box.x += box.size * relCoordinates[0];
-    //     box.y += box.size * relCoordinates[1];
-    // }) 
-
-    
-
-
-
-    // for (let i = 0; i < this.shape.length; i++) {
-    //   if (this.shape[i].x < 0) {
-    //     this.shape[i].x += boxSize * 1;
-
-    //   } else if (this.shape[i].x > 405) {
-    //     this.shape[i].x += boxSize * -1;
-
-    //   } else {
-    //     this.shape[i].x += boxSize * relCoordinates[0];
-    //   }
-    //   this.shape[i].y += boxSize * relCoordinates[1];
-    // }
-    
-    
   }
 
   rotateShape() {
-    let rotate = [];
-    for(let i = 0; i < this.currentShape.length; i++) {
-        for(let j = 0; j < this.currentShape[i].length; j++) {
-            if(!Array.isArray(rotate[j])) rotate[j] = [];
-            rotate[j].unshift(this.currentShape[i][j]);
-        }
-    }
-    this.currentShape = rotate;
+    // for (let i = 0; i < this.currentShape.length; i++) {
+    //   switch()
+    // }
   }
 }
 //  ===== END SHAPE CLASS =====
@@ -205,6 +177,53 @@ class Board {
     return true;
   }
 
+  reachedTop() {
+    for (let i = 0; i < this.gridOfBoxes.length; i++) {
+      if (this.gridOfBoxes[i].y === -boxSize) {
+        alert("GAME OVER");
+      }
+    }
+  }
+
+            isFullRow() {
+
+              let rowCounter = [];
+              let fullRowPosition = 0; // y value of specific row
+              // generate array with 18 zeros, one for each row
+              for (let i = 0; i < 18; i++) {
+                rowCounter.push(0);
+              }
+              //  loop over grid and increment counter for each specific row
+              for (let j = 0; j < this.gridOfBoxes.length; j++) {
+                if (this.gridOfBoxes[j].y % 45 === 0) {
+                  rowCounter[(this.gridOfBoxes[j].y/45)]++;
+                }
+                // if row counter reaches 10, store y value of this row in fullRowPosition
+                if (rowCounter[(this.gridOfBoxes[j].y/45)] === 10) {
+                  fullRowPosition = this.gridOfBoxes[j].y;
+                }
+              }
+              return fullRowPosition;
+            }
+
+            // loop over grid and look for objects with fullRowPosition y value
+            // if detected --> delete
+            deleteRow(fullRowPosition) {
+              fullRowPosition = this.isFullRow(); // verweis zu isFullRow() wahrscheinlich falsch
+              for (let i = 0; i < this.gridOfBoxes.length; i++){
+                if (this.gridOfBoxes[i].y === fullRowPosition) {
+                  this.gridOfBoxes.splice(i, 1);
+                }
+              } 
+            }
+
+            // moves all boxes in the grid by one boxSize
+            propagateBoard() {
+              for (let i = 0; i < this.gridOfBoxes.length; i++) {
+                this.gridOfBoxes[i].y += boxSize;
+              }
+            }
+
 }
 //  ===== END BOARD CLASS =====
 
@@ -228,6 +247,7 @@ class Game {
 
   // The interval which executes propagation and drawing of the board + the current falling shape
   play() {
+  // this.addName()
    setInterval(function() {
      this.propagate([0,1]); // y = 1 --> (see propagateShape) increases y by 45 every interval.
      this.draw();
@@ -253,6 +273,12 @@ class Game {
       this.currentShape = undefined;
       this.board.addBoxes(currentShapeBoxesTemp);
     }
+    
+    this.board.reachedTop();
+    // this.board.isFullRow();
+    // this.board.deleteRow();
+    // this.board.propagateBoard();
+
     // when done, draw 
     this.draw();
 
@@ -271,5 +297,18 @@ class Game {
     // also draw the board.
     this.board.draw(ctx)
   }
+
+  addName() {
+    let name = window.prompt("Hello. Welcome to TETRIS.\n\nPlease Enter Your name to get started");
+    document.getElementById("nameField").innerHTML = name;
+  }
 }
 //  ===== END GAME CLASS =====
+
+
+
+
+//  ===== NOTES FOR FULL ROW CHECK =====
+// check for full row: Create an object which keeps track of all boxes. Loop over the board and add one do the
+// counter at a specific y-value. If counter hits 10, loop over the board again and delete all boxes with this y-value
+// Propagate all remaining boxes in the board. Continue.
