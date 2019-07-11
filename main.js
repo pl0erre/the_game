@@ -7,17 +7,20 @@ document.addEventListener("DOMContentLoaded", function(event) {
   document.onkeydown = function(e) {
     switch (e.keyCode) {
         case 37: // left
-          game.currentShape.x -= 45;
+          game.propagate([-1,0]);
+          game.draw();
             break;
         case 38: // up
           game.currentShape.rotateShape();
             break;
         case 39: // right
-          game.x += 45;
+          game.propagate([1,0]);
+          game.draw();
 
           break;
         case 40: // down
-          game.y += 45;
+          game.propagate([0,1]);
+          game.draw();
           break;
         default:
           // alert("Invalid Key");
@@ -27,9 +30,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 
 
-document.getElementsByClassName("btn-start")[0].addEventListener("click",);
-document.getElementsByClassName("btn-reset")[0].addEventListener("click",);
-document.getElementsByClassName("btn-pause")[0].addEventListener("click", alert(pauseMessage));
+// document.getElementsByClassName("btn-start")[0].addEventListener("click",);
+// document.getElementsByClassName("btn-reset")[0].addEventListener("click",);
+// document.getElementsByClassName("btn-pause")[0].addEventListener("click", alert(pauseMessage));
 
 
 });
