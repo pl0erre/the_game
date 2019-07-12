@@ -44,7 +44,6 @@ footer {
     width: 100%;
     flex: 30;
     display: flex;
-
 }
 
 h3 {
@@ -75,6 +74,7 @@ canvas {
     border: 20px solid #2d1b00;
     box-shadow: 0px 0px 15px 1px #0ff;
     border-radius: 50px;
+    height: 810px;
 }
 
 .footer-box{
@@ -91,6 +91,7 @@ canvas {
     flex: 2;
     border-left: 10px solid #5ab9a8;
     border-right: 10px solid #5ab9a8;
+    height: 810px;
 }
 
 .sidebar {
@@ -110,7 +111,7 @@ canvas {
 }
 
 .info-box {
-    border: 1px solid black;
+    border: 2px solid #2d1b00;
     border-radius: 10px;
     flex: 1;
     text-align: center;
@@ -125,7 +126,6 @@ canvas {
 }
 
 .empty-box {
-    border: none;
     background: none;
     background-image: url(./Images/animate-pizza.gif);
     background-size: cover;
@@ -135,6 +135,9 @@ canvas {
 
 .next-box {
     flex: 2;
+    background-image: url(./Images/block-placeholder.png);
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .name-box {
@@ -159,7 +162,6 @@ canvas {
 
 /* BUTTON STYLING */
 .btn {
-
     margin: 15px auto;
     border-radius: 20px;
     background-color: slategray;

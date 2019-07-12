@@ -39,5 +39,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
   }
   // =====================
+
+  document.getElementsByClassName("btn-reset")[0].addEventListener("click", function(){game.stopGame(); game = new Game()} );
 });
 
