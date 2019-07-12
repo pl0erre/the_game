@@ -1,7 +1,14 @@
 
+let fullRowSound = new Audio("sounds/explode.ogg");
+
 // ===== SHAPES AND CONSTANTS =====
-var timer = 500;
+const timer = 500;
 const boxSize = 45;
+const rowAmount = 18;
+const canvasHight = 810;
+const canvasWidth = 450
+const borderColor = "#191970";
+const borderSize = 3;
 
 const shape_b = [[[1,1],[1,1]],[[1,1],[1,1]],[[1,1],[1,1]],[[1,1],[1,1]]];
 
@@ -63,7 +70,7 @@ class Shape {
     let checkWall = true
 
     for (let i = 0; i < this.shape.length; i++) {
-      if (this.shape[i].x  === 0 || this.shape[i].x + boxSize >= 450) {
+      if (this.shape[i].x  === 0 || this.shape[i].x + boxSize >= canvasWidth) {
         checkWall = false;
       }
     }
@@ -90,8 +97,10 @@ class Shape {
 
   // draw the shape by drawing every single box in this shape
   draw(ctx) {
-    ctx.fillStyle = this.color
-    this.shape.forEach(box => ctx.fillRect(box.x, box.y, box.size, box.size))
+    ctx.fillStyle = borderColor;
+    this.shape.forEach(box => ctx.fillRect(box.x, box.y, box.size, box.size));
+    ctx.fillStyle = this.color;
+    this.shape.forEach(box => ctx.fillRect(box.x, box.y, box.size-borderSize, box.size-borderSize));
   }
 
   // use of [x,y] (45 * 0 = 0; 45 * 1 = 45; 45 * -1 = -45) array to add or substract 45 to the x and y values of each box in a shape. 
@@ -101,7 +110,7 @@ class Shape {
     let checkWall = true
 
     for (let i = 0; i < this.shape.length; i++) {
-      if (this.shape[i].x  === 0 && relCoordinates[0] === -1 || this.shape[i].x + boxSize == 450 && relCoordinates[0] === 1) {
+      if (this.shape[i].x  === 0 && relCoordinates[0] === -1 || this.shape[i].x + boxSize == canvasWidth && relCoordinates[0] === 1) {
         checkWall = false;
       }
     }
@@ -125,7 +134,7 @@ class Shape {
 //  ===== BOARD CLASS =====
 class Board {
   constructor() {
-    this.gridOfBoxes = []; 
+    this.gridOfBoxes = [];
   }
 
   // adds boxes to the grid. (Takes shape apart and pushes evey box in the gridOfBoxes Array)
@@ -137,13 +146,15 @@ class Board {
 
   // draws grid of boxes using provided colors
   draw(ctx) {
-    ctx.fillStyle = "#696969";
+    ctx.fillStyle = borderColor;
     this.gridOfBoxes.forEach(box => ctx.fillRect(box.x, box.y, box.size, box.size));
+    ctx.fillStyle = "#696969";
+    this.gridOfBoxes.forEach(box => ctx.fillRect(box.x, box.y, box.size-borderSize, box.size-borderSize));
   }
 
   // checks x and y if box already exists in gridOfBoxes or if it is out of boundaries (canvas = 450pxx810px)
   doesBoxFit(box) {
-    if (box.y >= 810 - box.size)
+    if (box.y >= canvasHight - box.size)
         return false;
     
 
@@ -175,16 +186,15 @@ class Board {
   }
 
   isFullRow() {
-
     let rowCounter = [];
     // generate array with 18 zeros, one for each row
-    for (let i = 0; i < 18; i++) {
+    for (let i = 0; i < rowAmount; i++) {
       rowCounter.push(0);
     }
     //  loop over grid and increment counter for each specific row
     for (let j = 0; j < this.gridOfBoxes.length; j++) {
-      if (this.gridOfBoxes[j].y % 45 === 0) {
-        rowCounter[Math.floor(this.gridOfBoxes[j].y/45)]++;
+      if (this.gridOfBoxes[j].y % boxSize === 0) {
+        rowCounter[Math.floor(this.gridOfBoxes[j].y/boxSize)]++;
       }
     }
     for(let num = 0; num < rowCounter.length; num ++) {
@@ -196,6 +206,7 @@ class Board {
   // if detected --> delete
   deleteRow(fullRow) {
     this.gridOfBoxes = this.gridOfBoxes.filter(box => box.y !== fullRow)
+    fullRowSound.play();
   }
 
   // moves all boxes in the grid by one boxSize
@@ -208,11 +219,15 @@ class Board {
   }
 
   rowsScore() {
-    var rowsScore = document.getElementById('rows');
-    var counter = rowsScore.innerHTML;
-    counter++;
-    rowsScore.innerHTML = counter;
-}
+    var rowsSum = document.getElementById('rows');
+    var rowCounter = rowsSum.innerHTML;
+    var rowsScore = document.getElementById('rows-score');
+    var scoreCounter = parseInt(rowsScore.innerHTML);
+    rowCounter++;
+    rowsSum.innerHTML = rowCounter;
+    scoreCounter += 120;
+    rowsScore.innerHTML = scoreCounter;
+  }
 
 }
 //  ===== END BOARD CLASS =====
@@ -277,15 +292,18 @@ class Game {
       this.currentShape = undefined;
       this.board.addBoxes(currentShapeBoxesTemp);
       let fullRow = this.board.isFullRow();
-      if(fullRow >= 0) {
+
+      while (fullRow >= 0) {
         this.board.deleteRow(fullRow);
         this.board.propagateBoard(fullRow);
+        fullRow = this.board.isFullRow();
       }
+
       if (this.board.reachedTop()) {
-        alert("GAME OVER");
-        // let ctx = this.canvas.getContext("2d");
-        // ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        alert("\nGAME OVER !\n\nThis was all your fault, the game works perfectly fine and there are no bugs.");
         clearInterval(this.intervalId);
+        // ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       }
     }
     // when done, draw 
@@ -312,11 +330,3 @@ class Game {
   }
 }
 //  ===== END GAME CLASS =====
-
-
-
-
-//  ===== NOTES FOR FULL ROW CHECK =====
-// check for full row: Create an object which keeps track of all boxes. Loop over the board and add one do the
-// counter at a specific y-value. If counter hits 10, loop over the board again and delete all boxes with this y-value
-// Propagate all remaining boxes in the board. Continue.

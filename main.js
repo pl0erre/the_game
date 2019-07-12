@@ -1,13 +1,14 @@
 
 document.addEventListener("DOMContentLoaded", function(event) {
 
-  var pauseMessage = "\nGame Paused\nPress `SPACE` to continue";
   var game = new Game();
-  var gameMusic = new Audio("Sounds/game.mp3")
+  var pauseMessage = "\nGame Paused\nPress `SPACE` to continue";
+  var gameMusic = new Audio("sounds/game.mp3")
   
   // ===== MUSIC =====
   gameMusic.load();
-  gameMusic.oncanplaythrough = function(){
+  gameMusic.loop = true;
+  gameMusic.oncanplaythrough = function(){  
     gameMusic.play();
   }
   // =================
@@ -38,9 +39,5 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
   }
   // =====================
-
-// document.getElementsByClassName("btn-start")[0].addEventListener("click",);
-// document.getElementsByClassName("btn-reset")[0].addEventListener("click",);
 });
 
-// document.getElementsByClassName("btn-pause")[0].addEventListener("click", alert(pauseMessage));
