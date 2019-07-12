@@ -44,6 +44,7 @@ footer {
     width: 100%;
     flex: 30;
     display: flex;
+
 }
 
 h3 {
@@ -52,7 +53,6 @@ h3 {
 
 canvas {
     background-color:#c4f0c2;
-
 }
 
 /* ============== */
@@ -89,8 +89,8 @@ canvas {
 
 .game-field {
     flex: 2;
-    border-left: 15px solid #5ab9a8;
-    border-right: 15px solid #5ab9a8;
+    border-left: 10px solid #5ab9a8;
+    border-right: 10px solid #5ab9a8;
 }
 
 .sidebar {
@@ -98,7 +98,7 @@ canvas {
     flex: 1;
     display: flex;
     flex-direction: column;
-    height: auto;
+    height: 810px;
 }
 
 .sidebar-left {
@@ -127,7 +127,10 @@ canvas {
 .empty-box {
     border: none;
     background: none;
-    background-image: url(./Images/dragon.png);
+    background-image: url(./Images/animate-pizza.gif);
+    background-size: cover;
+    background-repeat: no-repeat;
+    flex: 2;
 }
 
 .next-box {
@@ -137,10 +140,11 @@ canvas {
 .name-box {
     display: flex;
     justify-content: center;
+    flex: 1;
 }
 
 #nameField {
-    margin: 25%;
+    margin: 30% 0;
 }
 
 
@@ -161,7 +165,7 @@ canvas {
     background-color: slategray;
     outline: none;
     border: none;
-    width: 150px;
+    width: 200px;
     cursor: pointer;
     box-shadow: 0 9px rgb(74, 85, 95);
     font-size: 1.4rem;
