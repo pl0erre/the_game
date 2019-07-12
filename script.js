@@ -7,7 +7,7 @@ const boxSize = 45;
 const rowAmount = 18;
 const canvasHight = 810;
 const canvasWidth = 450
-const borderColor = "#191970";
+const borderColor = "#040200";
 const borderSize = 3;
 
 const shape_b = [[[1,1],[1,1]],[[1,1],[1,1]],[[1,1],[1,1]],[[1,1],[1,1]]];
