@@ -1,6 +1,12 @@
 
 document.addEventListener("DOMContentLoaded", function(event) {
 
+  function addName() {
+    let name = window.prompt("\nHello. Welcome to YETRIS.\n\nPlease enter your name to get started !\n");
+    document.getElementById("nameField").innerHTML = name;
+  }
+  addName();
+
   var game = new Game();
   var pauseMessage = "\nGame Paused\nPress `SPACE` to continue";
   var gameMusic = new Audio("sounds/game.mp3")
@@ -33,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
           game.draw();
           break;
         case 32: //Space
-          alert(pauseMessage)
+          alert(pauseMessage);
         default:
           break;
     }

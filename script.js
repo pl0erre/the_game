@@ -245,7 +245,6 @@ class Game {
 
   // The interval which executes propagation and drawing of the board + the current falling shape
   play() {
-  this.addName()
    this.intervalId = setInterval(function() {
      this.propagate([0,1]); // y = 1 --> (see propagateShape) increases y by 45 every interval.
      this.draw();
@@ -315,11 +314,6 @@ class Game {
 
     // also draw the board.
     this.board.draw(ctx)
-  }
-
-  addName() {
-    let name = window.prompt("\nHello. Welcome to YETRIS.\n\nPlease enter your name to get started !\n");
-    document.getElementById("nameField").innerHTML = name;
   }
 
   stopGame() {
