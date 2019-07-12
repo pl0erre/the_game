@@ -200,6 +200,11 @@ class Board {
   deleteRow(fullRow) {
     this.gridOfBoxes = this.gridOfBoxes.filter(box => box.y !== fullRow)
     fullRowSound.play();
+    document.getElementsByClassName("canvas")[0].style.backgroundColor = "#F3FCF2";
+    setTimeout(function(){ 
+      document.getElementsByClassName("canvas")[0].style.backgroundColor = "#c4f0c2";
+    }, 80);
+
   }
 
   // moves all boxes in the grid by one boxSize
