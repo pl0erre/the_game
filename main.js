@@ -17,6 +17,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
   gameMusic.oncanplaythrough = function(){  
     gameMusic.play();
   }
+
+  
   // =================
 
   // ===== BUTTONS =====
