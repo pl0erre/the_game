@@ -130,7 +130,7 @@ canvas {
 
 .empty-box {
     background: none;
-    background-image: url(./Images/7d9.gif);
+    background-image: url(./Images/7d9.gif);    
     background-size: cover;
     background-repeat: no-repeat;
     flex: 2;
@@ -151,8 +151,8 @@ canvas {
 
 #nameField {
     margin: 30% 0;
-    color: #fd9075;
-    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;    
+    /* color: #fd9075; */
+    /* text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;     */
 }
 
 .btn-box {
